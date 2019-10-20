@@ -38,8 +38,8 @@ IMPORT_CSV <- function(DIR){
         # 47 columns
         if( ncol(DF)!=47 ){
               # place the name of exception files inside the 
-              # vector ERRORfiles
-              ERRORfiles <- c(EXCEPTIONfiles,f)
+              # vector EXCEPTIONfiles
+              EXCEPTIONfiles <- c(EXCEPTIONfiles,f)
               warning(paste("ATTENTION! File with different number of columns:",f))
               # counter used only for exception files
               N <- N+1
