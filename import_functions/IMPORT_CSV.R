@@ -14,45 +14,45 @@
   ##                                                             ##      
   #################################################################
 
-IMPORT_CSV=function(DIR){
+IMPORT_CSV <- function(DIR){
   
     #
     # DIR = directory containing csv files
     #
   
     # list files with the extention .csv
-    FILES<-list.files(DIR,full.names=TRUE, pattern="\\.csv$")
+    FILES <- list.files(DIR,full.names=TRUE, pattern="\\.csv$")
     
-    EXCEPTIONfiles=c()
-    N=0
+    EXCEPTIONfiles <- c()
+    N <- 0
     
-    for(f in FILES){
+    for( f in FILES ){
           
-        M=paste(N,"reading file:",f)
+        M <- paste(N,"reading file:",f)
         print(M)
         
         # import file to DF
-        DF<-read.csv(f)
+        DF <- read.csv(f)
         
         # Process only exception files, which doesn't have 
         # 47 columns
-        if (ncol(DF)!=47){
+        if( ncol(DF)!=47 ){
               # place the name of exception files inside the 
               # vector ERRORfiles
-              ERRORfiles=c(EXCEPTIONfiles,f)
+              ERRORfiles <- c(EXCEPTIONfiles,f)
               warning(paste("ATTENTION! File with different number of columns:",f))
               # counter used only for exception files
-              N=N+1
+              N <- N+1
               # Jump to next iteraction
               next()
         }
         
         # if it is the first iteraction
-        if(N==0){
+        if( N==0 ){
               # create DFtotal using the informaton from DF[0]
-              DFtotal=DF
+              DFtotal <- DF
               # Counter used only for the first iteraction
-              N=N+1
+              N <- N+1
               # Jump to next iteraction
               next()
         }
@@ -61,19 +61,19 @@ IMPORT_CSV=function(DIR){
         suppressWarnings(DFtotal <- rbind(DFtotal,DF))
         
         # counter used for files with 47 columns
-        N=N+1
+        N <- N+1
         
     }
     
     # import and merge files with different number of columns
     for(f in EXCEPTIONfiles){
-        DF<-read.csv(f)
-        DFtotal=merge(DFtotal,DF,all=T)
+        DF <- read.csv(f)
+        DFtotal <- merge(DFtotal,DF,all=T)
     }
 
     # remove lines containing header information
-    GOOD<-!grepl("Run", DFtotal$Run)
-    DFtotal<-DFtotal[GOOD,]
+    GOOD <- !grepl("Run", DFtotal$Run)
+    DFtotal <- DFtotal[GOOD,]
     
     return(DFtotal)
 
