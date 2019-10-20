@@ -10,7 +10,7 @@
   ##                        20-10-2019                           ##    
   ##                                                             ##
   ## Function created for importing csv files downloaded from    ##
-  ## the sra batabase.                                           ##
+  ## the sra database.                                           ##
   ##                                                             ##      
   #################################################################
 
