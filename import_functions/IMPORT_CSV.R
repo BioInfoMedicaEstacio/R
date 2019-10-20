@@ -66,7 +66,7 @@ IMPORT_CSV=function(DIR){
     }
     
     # import and merge files with different number of columns
-    for(f in ERRORfiles){
+    for(f in EXCEPTIONfiles){
         DF<-read.csv(f)
         DFtotal=merge(DFtotal,DF,all=T)
     }
