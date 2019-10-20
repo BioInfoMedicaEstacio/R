@@ -17,7 +17,7 @@
 IMPORT_CSV=function(DIR){
   
     #
-    # DIR=data containing csv files
+    # DIR = directory containing csv files
     #
   
     # list files with the extention .csv
