@@ -1,0 +1,90 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+author: Joao Ortigao
+---
+
+Importar lista com nome de genes e limpar espaços em braco.
+
+```{r}
+
+FILE="genestabela1.txt"
+GeneNames = read.table(FILE)
+GeneNames = gsub(" ","",GeneNames$V1)
+
+```
+
+Instalar o pacote mygene, se necessário.
+
+```{r}
+
+if (!requireNamespace("mygene", quietly = TRUE))
+    BiocManager::install("mygene")
+
+```
+
+Converter IDs usando a ferramenta mygene
+
+```{r}
+
+suppressPackageStartupMessages(library(mygene))
+
+DF1 = as.data.frame(queryMany(GeneNames, 
+                              scopes="symbol", 
+                              fields="ensembl.gene", 
+                              species="human"))
+
+LIST1 = queryMany(GeneNames, 
+                 scopes="symbol", 
+                 fields="ensembl.gene", 
+                 species="human")
+
+head(DF1)
+
+```
+
+Instalar ensembldb, se necessário.
+
+```{r}
+
+if (!requireNamespace("ensembldb", quietly = TRUE))
+    BiocManager::install("ensembldb")
+
+```
+
+Instalar EnsDb.Hsapiens.v86, se necessário.
+
+```{r}
+
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    BiocManager::install("EnsDb.Hsapiens.v86")
+
+```
+
+Converter IDs usando os pacotes ensembldb e EnsDb.Hsapiens.v86
+
+```{r}
+
+library(ensembldb)
+library(EnsDb.Hsapiens.v86)
+
+DF2 = genes(EnsDb.Hsapiens.v86, 
+            filter=list(GeneNameFilter(GeneNames),
+                        GeneIdFilter("ENSG", "startsWith")), 
+            return.type="data.frame", columns=c("gene_name","gene_id"))
+
+head(DF2)
+
+```
+
+
+
+```{r}
+
+
+
+```
+
