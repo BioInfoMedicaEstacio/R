@@ -1,0 +1,101 @@
+---
+title: "Get Gene Region"
+output: html_notebook
+---
+
+Procurando filtros dentro do Ensembl
+
+```{r}
+
+# BIOMART <- useEnsembl(biomart = "genes")
+
+library(biomaRt)
+
+ensembl = useEnsembl("ensembl", 
+                     dataset="hsapiens_gene_ensembl",
+                     host = "useast.ensembl.org")
+promotor = searchAttributes(mart=ensembl)
+ATT = searchAttributes(mart = ensembl)
+ATTunique = unique(ATT)
+
+
+ATT_UTR_name = ATT[grepl("UTR", ATT$name),]
+ATT_utr_name = ATT[grepl("utr", ATT$name),]
+ATT_names = ATT[grepl("ut", ATT$name, ignore.case = FALSE),]
+
+```
+
+Criando a tabela com os filtros desejados
+
+```{r}
+```{r}
+#importa a tabela atualizada de genes, retirar espaços
+all_genes = "AllGenesConvertedAtualizada.txt"
+all_genes=read.table(all_genes)
+all_genes=gsub(" ","",all_genes$V2)
+
+ensembl = useEnsembl("ensembl", 
+                     dataset="hsapiens_gene_ensembl",
+                     host = "useast.ensembl.org")
+
+res2 <-getBM(attributes = c("ensembl_gene_id",
+#                             "3utr",
+                             "5utr"),
+             filters = "ensembl_gene_id",
+             values = all_genes,
+             mart = ensembl)
+res = res2[grepl("^ENSG", res2$ensembl_gene_id),]
+
+write.csv(res, quote = FALSE, row.names = FALSE, file = "genes_5utr.csv")
+```
+
+
+```{r}
+
+
+library(biomaRt)
+library(dplyr)
+
+#importa a tabela atualizada de genes, retirar espaços
+all_genes = "AllGenesConvertedAtualizada.txt"
+all_genes=read.table(all_genes)
+all_genes=gsub(" ","",all_genes$V2)
+
+ensembl = useEnsembl("ensembl", 
+                     dataset="hsapiens_gene_ensembl")
+
+
+res_5_utr <- getBM(attributes=c("ensembl_gene_id",
+                           "chromosome_name",
+                           "5_utr_start",
+                           "5_utr_end"),
+              filters = "ensembl_gene_id",
+              values = all_genes,
+              mart = ensembl)
+
+res_5_utr = res_5_utr[grepl("^ENSG",res2$ensembl_gene_id),]
+
+DF = res_5_utr %>% filter(!is.na(res_5_utr$`5_utr_start`))
+
+#importa a tabela atualizada de genes, retirar espaços
+all_genes = "AllGenesConvertedAtualizada.txt"
+all_genes=read.table(all_genes)
+all_genes=gsub(" ","",all_genes$V2)
+
+ensembl = useEnsembl("ensembl", 
+                     dataset="hsapiens_gene_ensembl")
+
+
+res_3_utr <- getBM(attributes=c("ensembl_gene_id",
+                           "chromosome_name",
+                           "3_utr_start",
+                           "3_utr_end"),
+              filters = "ensembl_gene_id",
+              values = all_genes,
+              mart = ensembl)
+
+res_3_utr = res_3_utr[grepl("^ENSG",res2$ensembl_gene_id),]
+
+
+```
+
